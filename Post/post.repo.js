@@ -6,7 +6,7 @@ export const createPost = async (postData) => {
 };
 
 export const getAllPosts = async () => {
-  return await PostModel.find().populate("author", "username").sort({ createdAt: -1 });
+  return await PostModel.find().populate("author", "name").sort({ createdAt: -1 });
 };
 
 export const likePost = async (postId, userId) => {
