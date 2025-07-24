@@ -1,7 +1,8 @@
 //Post/post.routes.js
 import express from "express";
 import multer from "multer";
-import { verifyToken } from "../../middlewares/auth.middleware.js";
+import { auth } from "../middlewares/auth.middleware.js";
+import { upload } from "../middlewares/upload.middleware.js";
 import {
   handleCreatePost,
   handleGetAllPosts,
@@ -10,7 +11,7 @@ import {
   handleAddComment
 } from "./post.controller.js";
 
-const router = express.Router();
+const postRouter = express.Router();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -21,12 +22,11 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
 
-router.get("/", handleGetAllPosts);
-router.post("/", verifyToken, upload.single("image"), handleCreatePost);
-router.post("/:postId/like", verifyToken, handleLikePost);
-router.post("/:postId/unlike", verifyToken, handleUnlikePost);
-router.post("/:postId/comment", verifyToken, handleAddComment);
+postRouter.get("/", handleGetAllPosts);
+postRouter.post("/", auth, upload.single("image"), handleCreatePost);
+postRouter.post("/:postId/like", auth, handleLikePost);
+postRouter.post("/:postId/unlike", auth, handleUnlikePost);
+postRouter.post("/:postId/comment", auth, handleAddComment);
 
-export default router;
+export default postRouter;

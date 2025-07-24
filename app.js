@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 
-import userRoutes from './routes/user.routes.js';
-import postRoutes from "./features/Post/post.routes.js";
+import userRouter from './User/user.routes.js';
+import postRouter from './Post/post.routes.js';
 
 
 
@@ -13,16 +13,18 @@ dotenv.config();
 const app = express();
 app.use(express.json());//parse income json request in body
 app.use(cookieParser());
-app.use("/uploads", express.static("uploads")); // to serve image files
+
+// Serve image files publicly
+app.use("/uploads", express.static("uploads"));
 
 // Connect DB
 connectDB();
 
 // User related Routes
-app.use('/api/users', userRoutes);
+app.use('/api/users', userRouter);
 
 //Post related routes
-app.use("/api/posts", postRoutes);
+app.use("/api/posts", postRouter);
 
 // Start server
 app.listen(process.env.PORT || 5000, () => {

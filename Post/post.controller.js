@@ -10,15 +10,18 @@ import {
 export const handleCreatePost = async (req, res) => {
   try {
     const { content } = req.body;
-    const image = req.file?.filename;
-    const author = req.user._id;
+    // "If req.file exists, then get req.file.filename. 
+    // If req.file is undefined, don’t throw an error — just return undefined."
+    const image = req.file?.filename; // multer adds req.file
+    const author = req.user._id; // from auth middleware
 
     const post = await createPost({ content, image, author });
-    res.status(201).json(post);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create post" });
+    res.status(201).json({ msg: "Post created", post });
+  } catch (err) {
+    res.status(500).json({ msg: "Post creation failed", error: err.message });
   }
 };
+
 
 export const handleGetAllPosts = async (req, res) => {
   try {
